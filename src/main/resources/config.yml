@@ -1,0 +1,20 @@
+host: localhost
+port: 35565
+apikey: 123456789abcdef
+
+formatting:
+    # The system is old and crappy, so the tokens between types of message may not be consistent.
+
+    # If a token is in [square brackets], then it requires Vault on the server the message is being sent from.
+    # If a token is in {curly braces}, then it requires Factions on the server the message is being sent from.
+
+    # Tokens: source, player/user, message, uuid, world, time, [primaryGroup, prefix, suffix]
+    chat: "&9{source}&8 \u00bb &b{player}&8 \u00bb &f{message}"
+
+    # Tokens: target, player
+    playerConnect: "&9{target}&2 \u00bb &b{player}&2 has connected."
+    playerDisconnect: "&9{target}&4 \u00bb &b{player}&4 has disconnected."
+
+    # Tokens: name
+    serverConnect: "&9{name}&2 \u00bb &dServer connected to Inter."
+    serverDisconnect: "&9{name}&2 \u00bb &dServer disconnected from Inter."

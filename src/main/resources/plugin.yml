@@ -1,0 +1,16 @@
+name: Inter
+main: com.archivesmc.Inter.Plugin
+version: 0.1.0
+
+depend: [Vault]
+
+commands:
+    inc:
+            description: Send a message to the other servers.
+            usage: /<command> [message]
+    inctoggle:
+            description: Enable or disable cross-server chat for yourself.
+            usage: /<command>
+    inw:
+            description: See who's online on the other servers.
+            usage: /<command>
