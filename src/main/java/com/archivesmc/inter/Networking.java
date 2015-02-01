@@ -57,7 +57,7 @@ public class Networking {
         return this.handshake();
     }
 
-    public boolean handshake() {
+    boolean handshake() {
         Map<String, Object> data = this.gson.fromJson(this.readLine(), token);
 
         assert data != null;  // Should never happen
@@ -145,13 +145,13 @@ public class Networking {
         }
     }
 
-    public void sendLine(String data) throws IOException {
+    void sendLine(String data) throws IOException {
         this.output.write(data);
         this.output.write("\r\n");
         this.output.flush();
     }
 
-    public String toJson(Map<String, Object> data) {
+    String toJson(Map<String, Object> data) {
         return this.gson.toJson(data);
     }
 

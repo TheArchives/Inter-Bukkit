@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WhoCommand implements CommandExecutor {
-    Plugin plugin;
+    private Plugin plugin;
 
     public WhoCommand(Plugin plugin) {
         this.plugin = plugin;

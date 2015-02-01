@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class ChatCommand implements CommandExecutor {
-    Plugin plugin;
+    private Plugin plugin;
 
     public ChatCommand(Plugin plugin) {
         this.plugin = plugin;

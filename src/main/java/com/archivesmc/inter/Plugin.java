@@ -32,10 +32,8 @@ public class Plugin extends JavaPlugin {
     private Chat chat;
     private Permission permission;
 
-    private HandlingTask handlingTask;
     private BukkitTask handlingBukkitTask;
 
-    private NetworkingTask networkingTask;
     private BukkitTask networkingBukkitTask;
     
     private ChatCommand chatCommandExecutor;
@@ -72,10 +70,10 @@ public class Plugin extends JavaPlugin {
 
         // Create our handlers and tasks.
         this.handling = new Handling(this);
-        this.handlingTask = new HandlingTask(this);
+        HandlingTask handlingTask = new HandlingTask(this);
 
         this.networking = new Networking(this, this.config.getApiKey(), this.config.getHost(), this.config.getPort());
-        this.networkingTask = new NetworkingTask(this);
+        NetworkingTask networkingTask = new NetworkingTask(this);
 
         if (!this.networking.connect()) {
             // Connect! If it didn't work, we'll just disable ourselves.
@@ -84,8 +82,8 @@ public class Plugin extends JavaPlugin {
         }
         
         // Start up our tasks. We do this to avoid polling on the main thread, which would be rather slow.
-        this.handlingBukkitTask = this.getServer().getScheduler().runTaskTimer(this, this.handlingTask, 0, 1);
-        this.networkingBukkitTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.networkingTask, 0, 10);
+        this.handlingBukkitTask = this.getServer().getScheduler().runTaskTimer(this, handlingTask, 0, 1);
+        this.networkingBukkitTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, networkingTask, 0, 10);
 
         // Check that bukkit was actually happy to schedule the tasks.
         if (this.handlingBukkitTask.getTaskId() < 0) {
@@ -132,7 +130,7 @@ public class Plugin extends JavaPlugin {
         }
     }
     
-    public void setupVault() {
+    void setupVault() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return;
         }

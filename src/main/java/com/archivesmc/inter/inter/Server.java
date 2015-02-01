@@ -2,14 +2,15 @@ package com.archivesmc.inter.inter;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Server {
     private String name;
-    private HashSet<String> players;
+    private Set<String> players;
 
     public Server(String name) {
         this.name = name;
-        this.players = new HashSet<String>();
+        this.players = new HashSet<>();
     }
 
     public void addPlayers(List<String> players) {
@@ -35,6 +36,6 @@ public class Server {
     }
 
     public HashSet<String> getPlayers() {
-        return new HashSet<String>(players);
+        return new HashSet<>(players);
     }
 }
