@@ -1,27 +1,31 @@
 package com.archivesmc.inter;
 
-import java.util.HashMap;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Handling {
     private Plugin plugin;
-    private ConcurrentLinkedQueue<HashMap<String, Object>> queue = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Map<String, Object>> queue = new ConcurrentLinkedQueue<>();
 
     public Handling(Plugin plugin) {
         this.plugin = plugin;
     }
 
-    public void queueUp(HashMap<String, Object> data) {
+    public void queueUp(Map<String, Object> data) {
         // This will be called from another thread.
         this.queue.add(data);
     }
 
+    @SuppressWarnings("unchecked")
     public void handleMessage() {
         if (this.queue.isEmpty()) {
             return;
         }
 
-        HashMap<String, Object> data = this.queue.poll();
+        Map<String, Object> data = this.queue.poll();
 
         String from = (String) data.get("from");
         String formatted;
@@ -29,32 +33,59 @@ public class Handling {
         switch (from) {
             case "chat":
                 formatted = Utils.formatString(this.plugin.config.getStringChat(), data);
-
                 this.plugin.sendToPlayers(formatted);
+                
                 break;
             case "players":
                 String type = (String) data.get("type");
 
+                String target;
+                String player;
+
                 switch (type) {
                     case "online":
+                        target = (String) data.get("target");
+                        player = (String) data.get("player");
+                        
+                        this.plugin.getServer(target).addPlayer(player);
+                        
                         formatted = Utils.formatString(this.plugin.config.getStringPlayerConnect(), data);
-
                         this.plugin.sendToPlayers(formatted);
+                        
                         break;
                     case "offline":
-                        formatted = Utils.formatString(this.plugin.config.getStringPlayerDisconnect(), data);
+                        target = (String) data.get("target");
+                        player = (String) data.get("player");
 
+                        this.plugin.getServer(target).removePlayer(player);
+
+                        formatted = Utils.formatString(this.plugin.config.getStringPlayerDisconnect(), data);
                         this.plugin.sendToPlayers(formatted);
+                        
                         break;
                     case "list":
-                        // TODO: Player list sent from Inter
+                        target = (String) data.get("target");
+                        
+                        if ("all".equals(target)) {
+                            Map<String, ArrayList<String>> players = (Map<String, ArrayList<String>>) data.get("players");
+                            
+                            for (String key : players.keySet()) {
+                                this.plugin.addServer(key, players.get(key));
+                            }
+                            
+                            this.plugin.logger.info(String.format("Got players for %s servers.", this.plugin.servers.size()));
+                        }
                 }
                 break;
             case "auth":
                 String action = (String) data.get("action");
+                String server;
 
                 switch (action) {
                     case "disconnected":
+                        server = (String) data.get("name");
+                        this.plugin.removeServer(server);
+                        
                         formatted = Utils.formatString(this.plugin.config.getStringServerDisconnect(), data);
 
                         this.plugin.sendToPlayers(formatted);
@@ -69,6 +100,11 @@ public class Handling {
 
                                 this.plugin.logger.info(String.format("Authenticated as '%s'", this.plugin.name));
                                 this.plugin.networking.sendGetPlayers();
+                                
+                                for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
+                                    // Send player connections. This plugin isn't meant to be loaded late, but it can happen!
+                                    this.plugin.networking.sendPlayerConnect(onlinePlayer);
+                                }
                             } else {
                                 String error = (String) data.get("error");
                                 this.plugin.logger.severe(String.format("Error authenticating: %s", error));
@@ -76,14 +112,18 @@ public class Handling {
                             }
                             break;
                         } else {
+                            server = (String) data.get("name");
+                            this.plugin.addServer(server, new ArrayList<String>());
+                            
                             formatted = Utils.formatString(this.plugin.config.getStringServerConnect(), data);
-
                             this.plugin.sendToPlayers(formatted);
                         }
                 }
                 break;
             case "core":
-                break;
+                if (data.containsKey("error")) {
+                    this.plugin.logger.warning(String.format("Error received from server: %s", data.get("error")));
+                }
             case "ping":
                 this.plugin.networking.sendPong((String) data.get("timestamp"));
                 break;

@@ -8,7 +8,7 @@ formatting:
     # If a token is in [square brackets], then it requires Vault on the server the message is being sent from.
 
     # Tokens: source, player/user, message, uuid, world, time, [primaryGroup, prefix, suffix]
-    chat: "&9{source}&8 \u00bb &b{player}&8 \u00bb &f{message}"
+    chat: "&9{source}&8 \u00bb &b{user}&8 \u00bb &f{message}"
 
     # Tokens: target, player
     playerConnect: "&9{target}&2 \u00bb &b{player}&2 has connected."
@@ -17,3 +17,22 @@ formatting:
     # Tokens: name
     serverConnect: "&9{name}&2 \u00bb &dServer connected to Inter."
     serverDisconnect: "&9{name}&2 \u00bb &dServer disconnected from Inter."
+    
+    # Tokens: server
+    # Shown at the start of the /interwho or /inw list
+    listHeader: "&2{server}&d \u00bb &8Listing players on the other servers.."
+    
+    # Tokens: server, players
+    # Shown for each server in /interwho or /inw
+    listServer: "&9{server}&d \u00bb {players}"
+    
+    # Tokens: player
+    # Shown for each player on each server in /interwho or /inw
+    # Players will be split with commas, so putting a colour at the end of this will colour the commas
+    listPlayer: "&d{player}&8"
+
+    # No tokens
+    toggleEnabled: "&6\u00bb &dYou are now chatting with all servers via Inter."
+    toggleDisabled: "&6\u00bb &dYou are now chatting directly on the server."
+    
+    configReloaded: "&6\u00bb &dReloaded configuration."

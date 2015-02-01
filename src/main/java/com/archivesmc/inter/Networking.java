@@ -3,19 +3,20 @@ package com.archivesmc.inter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Networking {
     private String apiKey;
     private String hostname;
     private Integer port;
-    private Long version = 3L;
+    private Double version = 3D;
 
     private Plugin plugin;
 
@@ -25,7 +26,9 @@ public class Networking {
     private OutputStreamWriter output;
 
     private Gson gson = new Gson();
-    private Type token = new TypeToken<HashMap<String, Object>>(){}.getType();
+    private Type token = new TypeToken<Map<String, Object>>(){}.getType();
+    
+    private boolean stopping = false;
 
     public Networking(Plugin plugin, String apiKey, String hostname, Integer port) {
         this.apiKey = apiKey;
@@ -55,11 +58,11 @@ public class Networking {
     }
 
     public boolean handshake() {
-        HashMap<String, Object> data = this.gson.fromJson(this.readLine(), token);
+        Map<String, Object> data = this.gson.fromJson(this.readLine(), token);
 
         assert data != null;  // Should never happen
 
-        Long version = (Long) data.get("version");
+        Double version = (Double) data.get("version");
 
         if (!version.equals(this.version)) {
             if (version < this.version) {
@@ -73,7 +76,7 @@ public class Networking {
             return false;
         }
 
-        HashMap<String, Object> toSend = new HashMap<>();
+        Map<String, Object> toSend = new HashMap<>();
         toSend.put("api_key", this.apiKey);
 
         try {
@@ -88,6 +91,12 @@ public class Networking {
     }
 
     public void disconnect() {
+        this.stopping = true;
+        
+        if (this.socket == null) {
+            return;
+        }
+
         if (!this.socket.isClosed()) {
             try {
                 this.input.close();
@@ -104,6 +113,10 @@ public class Networking {
             StringBuilder buffer = new StringBuilder();
 
             while (true) {
+                if (this.stopping) {
+                    return "";
+                }
+
                 int int_value;
                 char value;
 
@@ -138,11 +151,11 @@ public class Networking {
         this.output.flush();
     }
 
-    public String toJson(HashMap<String, Object> data) {
+    public String toJson(Map<String, Object> data) {
         return this.gson.toJson(data);
     }
 
-    public HashMap<String, Object> fromJson(String data) {
+    public Map<String, Object> fromJson(String data) {
         return this.gson.fromJson(data, this.token);
     }
 
@@ -150,12 +163,12 @@ public class Networking {
      * Specific sending methods for various things
      */
 
-    public void sendChat(Player player, String message) {
-        HashMap<String, Object> data = new HashMap<>();
+    public void sendChat(CommandSender commandSender, String message) {
+        Map<String, Object> data = new HashMap<>();
         data.put("action", "chat");
         data.put("message", message);
 
-        this.plugin.addVariables(player, data);
+        this.plugin.addVariables(commandSender, data);
 
         try {
             this.sendLine(this.toJson(data));
@@ -166,7 +179,7 @@ public class Networking {
     }
 
     public void sendPong(String timestamp) {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("pong", timestamp);
 
         try {
@@ -178,7 +191,7 @@ public class Networking {
     }
 
     public void sendGetPlayers() {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("action", "players");
         data.put("type", "list");
 
@@ -191,7 +204,7 @@ public class Networking {
     }
 
     public void sendPlayerConnect(OfflinePlayer player) {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("action", "players");
         data.put("type", "online");
         data.put("player", player.getName());
@@ -205,7 +218,7 @@ public class Networking {
     }
 
     public void sendplayerDisconnect(OfflinePlayer player) {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("action", "players");
         data.put("type", "offline");
         data.put("player", player.getName());

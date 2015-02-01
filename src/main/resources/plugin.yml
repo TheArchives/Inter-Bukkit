@@ -1,16 +1,31 @@
 name: Inter
-main: com.archivesmc.Inter.Plugin
+main: com.archivesmc.inter.Plugin
 version: 0.1.0
+author: Gareth Coles
+website: https://github.com/gdude2002/Inter-bukkit
 
 depend: [Vault]
 
 commands:
-    inc:
-            description: Send a message to the other servers.
-            usage: /<command> [message]
-    inctoggle:
-            description: Enable or disable cross-server chat for yourself.
-            usage: /<command>
-    inw:
-            description: See who's online on the other servers.
-            usage: /<command>
+    interchat:
+        description: Send a message to the other servers.
+        usage: /<command> [message]
+        aliases: [inc]
+    interwho:
+        description: See who's online on the other servers.
+        usage: /<command>
+        aliases: [inw]
+    interreload:
+        description: Reload the Inter configuration.
+        usage: /<command>
+        aliases: [inr]
+        permission: inter.reload
+
+permissions:
+    inter.*:
+        description: Gives access to all Inter commands
+        children:
+            inter.reload: true
+    inter.reload:
+        description: Allows you to reload Inter's configuration
+        default: op
