@@ -40,6 +40,15 @@ dependencies {
     compile "net.milkbowl.vault:VaultAPI:1.5"
 }
 
+sourceSets {
+    // If we don't do this, we get two copies of each yml.
+    main {
+        resources {
+            exclude '*.yml'
+        }
+    }
+}
+
 jar {
     from sourceSets.main.allSource
 }
