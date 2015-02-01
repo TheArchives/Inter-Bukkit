@@ -22,5 +22,9 @@ public class NetworkingTask implements Runnable {
                 e.printStackTrace();
             }
         }
+        
+        if (this.plugin.isEnabled()) {
+            this.plugin.networkingBukkitTask = this.plugin.getServer().getScheduler().runTaskLaterAsynchronously(this.plugin, this.plugin.networkingTask, 10);
+        }
     }
 }

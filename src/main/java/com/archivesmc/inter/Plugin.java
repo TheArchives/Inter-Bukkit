@@ -34,7 +34,8 @@ public class Plugin extends JavaPlugin {
 
     private BukkitTask handlingBukkitTask;
 
-    private BukkitTask networkingBukkitTask;
+    public BukkitTask networkingBukkitTask;
+    public NetworkingTask networkingTask;
     
     private ChatCommand chatCommandExecutor;
     private WhoCommand whoCommandExecutor;
@@ -73,7 +74,7 @@ public class Plugin extends JavaPlugin {
         HandlingTask handlingTask = new HandlingTask(this);
 
         this.networking = new Networking(this, this.config.getApiKey(), this.config.getHost(), this.config.getPort());
-        NetworkingTask networkingTask = new NetworkingTask(this);
+        this.networkingTask = new NetworkingTask(this);
 
         if (!this.networking.connect()) {
             // Connect! If it didn't work, we'll just disable ourselves.
@@ -83,7 +84,7 @@ public class Plugin extends JavaPlugin {
         
         // Start up our tasks. We do this to avoid polling on the main thread, which would be rather slow.
         this.handlingBukkitTask = this.getServer().getScheduler().runTaskTimer(this, handlingTask, 0, 1);
-        this.networkingBukkitTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, networkingTask, 0, 10);
+        this.networkingBukkitTask = this.getServer().getScheduler().runTaskLaterAsynchronously(this, this.networkingTask, 10);
 
         // Check that bukkit was actually happy to schedule the tasks.
         if (this.handlingBukkitTask.getTaskId() < 0) {
