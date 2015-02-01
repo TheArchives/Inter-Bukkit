@@ -6,7 +6,6 @@ formatting:
     # The system is old and crappy, so the tokens between types of message may not be consistent.
 
     # If a token is in [square brackets], then it requires Vault on the server the message is being sent from.
-    # If a token is in {curly braces}, then it requires Factions on the server the message is being sent from.
 
     # Tokens: source, player/user, message, uuid, world, time, [primaryGroup, prefix, suffix]
     chat: "&9{source}&8 \u00bb &b{player}&8 \u00bb &f{message}"
