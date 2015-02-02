@@ -36,7 +36,10 @@ public class Handling {
                 // We don't want to translate any colours in chat.
                 for (String key : data.keySet()) {
                     if (! "message".equals(key)) {
-                        data.put(key, ChatColor.translateAlternateColorCodes('&', (String) data.get(key)));
+                        Object value = data.get(key);
+                        if (value instanceof String) {
+                            data.put(key, ChatColor.translateAlternateColorCodes('&', (String) value));
+                        }
                     }
                 }
                 
