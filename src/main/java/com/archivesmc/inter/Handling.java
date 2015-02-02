@@ -40,10 +40,14 @@ public class Handling {
                         if (value instanceof String) {
                             data.put(key, ChatColor.translateAlternateColorCodes('&', (String) value));
                         }
+                    } else {
+                        data.put(key, ((String) data.get(key)).replace("{", "\\{"));
                     }
                 }
                 
-                formatted = Utils.formatString(this.plugin.config.getStringChat(), data);
+                formatted = Utils.formatString(
+                        ChatColor.translateAlternateColorCodes('&', this.plugin.config.getStringChat()), data
+                );
                 this.plugin.sendToPlayers(formatted, false);
                 
                 break;

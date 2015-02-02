@@ -226,7 +226,11 @@ public class Plugin extends JavaPlugin {
                 player.sendMessage(message);
             }
         }
-        
-        this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+
+        if (doColours) {
+            this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        } else {
+            this.getServer().getConsoleSender().sendMessage(message);
+        }
     }
 }
