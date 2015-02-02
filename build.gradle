@@ -58,5 +58,6 @@ shadowJar {
 
     dependencies {
         exclude(dependency("net.milkbowl.vault:VaultAPI:1.5"))
+        exclude(dependency("org.bukkit:bukkit:1.7.9-R0.2"))
     }
 }

@@ -1,5 +1,6 @@
 package com.archivesmc.inter;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -32,8 +33,15 @@ public class Handling {
 
         switch (from) {
             case "chat":
+                // We don't want to translate any colours in chat.
+                for (String key : data.keySet()) {
+                    if (! "message".equals(key)) {
+                        data.put(key, ChatColor.translateAlternateColorCodes('&', (String) data.get(key)));
+                    }
+                }
+                
                 formatted = Utils.formatString(this.plugin.config.getStringChat(), data);
-                this.plugin.sendToPlayers(formatted);
+                this.plugin.sendToPlayers(formatted, false);
                 
                 break;
             case "players":
@@ -50,7 +58,7 @@ public class Handling {
                         this.plugin.getServer(target).addPlayer(player);
                         
                         formatted = Utils.formatString(this.plugin.config.getStringPlayerConnect(), data);
-                        this.plugin.sendToPlayers(formatted);
+                        this.plugin.sendToPlayers(formatted, true);
                         
                         break;
                     case "offline":
@@ -60,7 +68,7 @@ public class Handling {
                         this.plugin.getServer(target).removePlayer(player);
 
                         formatted = Utils.formatString(this.plugin.config.getStringPlayerDisconnect(), data);
-                        this.plugin.sendToPlayers(formatted);
+                        this.plugin.sendToPlayers(formatted, true);
                         
                         break;
                     case "list":
@@ -88,7 +96,7 @@ public class Handling {
                         
                         formatted = Utils.formatString(this.plugin.config.getStringServerDisconnect(), data);
 
-                        this.plugin.sendToPlayers(formatted);
+                        this.plugin.sendToPlayers(formatted, true);
                         break;
                     case "authenticated":
                         if (!this.plugin.authenticated) {
@@ -116,7 +124,7 @@ public class Handling {
                             this.plugin.addServer(server, new ArrayList<String>());
                             
                             formatted = Utils.formatString(this.plugin.config.getStringServerConnect(), data);
-                            this.plugin.sendToPlayers(formatted);
+                            this.plugin.sendToPlayers(formatted, true);
                         }
                 }
                 break;

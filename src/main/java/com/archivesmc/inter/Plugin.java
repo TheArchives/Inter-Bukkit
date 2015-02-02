@@ -36,9 +36,6 @@ public class Plugin extends JavaPlugin {
 
     public BukkitTask networkingBukkitTask;
     public NetworkingTask networkingTask;
-    
-    private ChatCommand chatCommandExecutor;
-    private WhoCommand whoCommandExecutor;
 
     public Config config;
     public Handling handling;
@@ -172,10 +169,6 @@ public class Plugin extends JavaPlugin {
         }
     }
 
-    public void addVariables(Map<String, Object> map) {
-        this.addVariables(null, map);
-    }
-
     public void addVariables(CommandSender commandSender, Map<String, Object> map) {
         if (commandSender != null) {
             
@@ -225,21 +218,15 @@ public class Plugin extends JavaPlugin {
         getServer().getPluginManager().disablePlugin(this);
     }
 
-    public void sendToPlayers(String message) {
+    public void sendToPlayers(String message, boolean doColours) {
         for (Player player : this.getServer().getOnlinePlayers()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
-        
-        this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-    }
-
-    public void sendToPlayers(String message, String permission) {
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            if (player.hasPermission(permission)) {
+            if (doColours){
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            } else {
+                player.sendMessage(message);
             }
         }
-
+        
         this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 }
