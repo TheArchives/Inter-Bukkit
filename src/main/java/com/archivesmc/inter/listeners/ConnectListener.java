@@ -13,8 +13,10 @@ public class ConnectListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerConnect(PlayerLoginEvent event) {
-        this.plugin.networking.sendPlayerConnect(event.getPlayer());
+        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+            this.plugin.networking.sendPlayerConnect(event.getPlayer());
+        }
     }
 }
