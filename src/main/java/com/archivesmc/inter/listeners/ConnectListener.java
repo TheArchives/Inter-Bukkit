@@ -15,7 +15,7 @@ public class ConnectListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerConnect(PlayerLoginEvent event) {
-        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+        if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
             this.plugin.networking.sendPlayerConnect(event.getPlayer());
         }
     }
