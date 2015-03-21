@@ -77,4 +77,11 @@ public class Config {
     public String getStringConfigReloaded() {
         return this.configuration.getString("formatting.configReloaded");
     }
+
+    public String getStringNotAMessage() {
+        return this.configuration.getString(
+                "formatting.notAMessage",
+                "&4\u00bb &6\"&d{message}&6\" &cis not a meaningful message. Please put some effort into your messages."
+        );
+    }
 }

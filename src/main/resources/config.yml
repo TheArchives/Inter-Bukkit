@@ -36,3 +36,5 @@ formatting:
     toggleDisabled: "&6\u00bb &dYou are now chatting directly on the server."
     
     configReloaded: "&6\u00bb &dReloaded configuration."
+
+    notAMessage: "&4\u00bb &6\"&d{message}&6\" &cis not a meaningful message. Please put some effort into your messages."

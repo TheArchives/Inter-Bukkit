@@ -2,6 +2,7 @@ package com.archivesmc.inter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
@@ -164,6 +165,33 @@ public class Networking {
      */
 
     public void sendChat(CommandSender commandSender, String message) {
+        Map<String, Object> args;
+
+        if (message.length() < 2) {
+            args = new HashMap<>();
+            args.put("message", message);
+
+            commandSender.sendMessage(
+                    ChatColor.translateAlternateColorCodes(
+                            '&', Utils.formatString("getStringNotAMessage", args)
+                    )
+            );
+
+            return;
+        } else if (message.length() < 3 && message.charAt(0) == message.charAt(1)) {
+            args = new HashMap<>();
+            args.put("message", message);
+
+            commandSender.sendMessage(
+                    ChatColor.translateAlternateColorCodes(
+                            '&', Utils.formatString("getStringNotAMessage", args)
+                    )
+            );
+
+            return;
+        }
+
+
         Map<String, Object> data = new HashMap<>();
         data.put("action", "chat");
         data.put("message", message);
