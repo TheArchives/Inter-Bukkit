@@ -173,7 +173,7 @@ public class Networking {
 
             commandSender.sendMessage(
                     ChatColor.translateAlternateColorCodes(
-                            '&', Utils.formatString("getStringNotAMessage", args)
+                            '&', Utils.formatString(this.plugin.config.getStringNotAMessage(), args)
                     )
             );
 
@@ -184,7 +184,7 @@ public class Networking {
 
             commandSender.sendMessage(
                     ChatColor.translateAlternateColorCodes(
-                            '&', Utils.formatString("getStringNotAMessage", args)
+                            '&', Utils.formatString(this.plugin.config.getStringNotAMessage(), args)
                     )
             );
 
